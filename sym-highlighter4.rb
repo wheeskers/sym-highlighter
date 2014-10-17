@@ -17,16 +17,13 @@ class String
 		# Cyrillic // Cyrillic Supplementary
 		unicode_color_range['38;5;247'] = (0x0400..0x04FF).to_a + (0x0500..0x052F).to_a
 		unicode_color_range.each do |color,range|
-			#chr = "\e[#{color}m#{chr}\e[0m" if range.include? chr.unpack('U*').join.to_i
 			chr = "\033[#{color}m#{chr}\e[0m" if range.include? chr.unpack('U*').join.to_i
 		end
 		return chr
 	end
 	def colorify_str
 		m = []
-		self.each_char do |c|
-			m.push colorify_chr c
-		end
+		self.each_char { |c| m.push colorify_chr(c) }
 		return m.join
 	end
 end
@@ -39,6 +36,5 @@ elsif ARGV.join =~ /help|-h/i
 	puts "Usage:\n\t$ #{__FILE__} [message]\n\nOr simply run this script and enter your text"
 else
 	puts "\n"
-	#puts "-"*%x(tput cols).chomp.to_i
 	ARGV.each{|arg| puts arg.colorify_str}
 end
